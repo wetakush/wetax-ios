@@ -94,11 +94,9 @@ struct RideHistoryRow: View {
                 
                 Spacer()
                 
-                if let date = ride.completedAt ?? ride.createdAt {
-                    Text(dateFormatter.string(from: date))
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                }
+                Text(dateFormatter.string(from: ride.completedAt ?? ride.createdAt))
+                    .font(.caption)
+                    .foregroundColor(.gray)
             }
         }
         .padding()
