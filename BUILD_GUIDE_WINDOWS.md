@@ -51,7 +51,7 @@
 
 2. **Подключите локальный репозиторий:**
    ```bash
-   git remote add origin https://github.com/ВАШ_USERNAME/wetax-ios.git
+   git remote add origin https://github.com/wetakush/wetax-ios.git
    git branch -M main
    git push -u origin main
    ```
