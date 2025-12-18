@@ -1,0 +1,52 @@
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    environment:
+      groups:
+        - app_store_credentials
+      vars:
+        XCODE_VERSION: "15.0"
+        APP_ID: "com.wetax.app"
+      xcode: "15.0"
+      cocoapods: default
+    scripts:
+      - name: Set up code signing settings on Xcode project
+        script: |
+          xcode-project use-profiles
+      - name: Install dependencies
+        script: |
+          # Установка зависимостей если нужно
+          echo "No external dependencies"
+      - name: Build ipa for distribution
+        script: |
+          xcodebuild clean build \
+            -project WeTax/WeTax.xcodeproj \
+            -scheme WeTax \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath $CM_BUILD_DIR/build/WeTax.xcarchive \
+            archive | xcpretty
+      - name: Export IPA
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath $CM_BUILD_DIR/build/WeTax.xcarchive \
+            -exportPath $CM_BUILD_DIR/build/ipa \
+            -exportOptionsPlist $CM_EXPORT_OPTIONS_PLIST || echo "Export skipped"
+    artifacts:
+      - build/ipa/*.ipa
+      - build/*.dSYM.zip
+    publishing:
+      email:
+        recipients:
+          - user@example.com
+        notify:
+          success: true
+          failure: false
+      slack:
+        channel: '#builds'
+        notify:
+          success: true
+          failure: true
+

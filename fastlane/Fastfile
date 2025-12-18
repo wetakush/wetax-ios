@@ -1,0 +1,51 @@
+# Fastfile для автоматизации сборки и деплоя WeTax
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Описание: Сборка приложения для симулятора"
+  lane :build_simulator do
+    build_app(
+      workspace: "WeTax.xcworkspace",
+      scheme: "WeTax",
+      destination: "generic/platform=iOS Simulator",
+      configuration: "Debug",
+      skip_codesigning: true
+    )
+  end
+
+  desc "Описание: Сборка приложения для устройства"
+  lane :build_device do
+    build_app(
+      workspace: "WeTax.xcworkspace",
+      scheme: "WeTax",
+      configuration: "Release"
+    )
+  end
+
+  desc "Описание: Создание архива приложения"
+  lane :archive do
+    build_app(
+      workspace: "WeTax.xcworkspace",
+      scheme: "WeTax",
+      export_method: "app-store",
+      configuration: "Release"
+    )
+  end
+
+  desc "Описание: Запуск тестов"
+  lane :test do
+    run_tests(
+      workspace: "WeTax.xcworkspace",
+      scheme: "WeTax",
+      device: "iPhone 15"
+    )
+  end
+
+  desc "Описание: Очистка проекта"
+  lane :clean do
+    clean_build_artifacts
+    sh("cd WeTax && xcodebuild clean -project WeTax.xcodeproj -scheme WeTax")
+  end
+end
+

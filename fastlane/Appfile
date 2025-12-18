@@ -1,0 +1,9 @@
+# Appfile для Fastlane
+
+app_identifier("com.wetax.app")
+apple_id("wetakush@icloud.com")
+team_id("YOUR_TEAM_ID")
+
+# Для автоматической сборки без подписи
+# skip_waiting_for_build_processing(true)
+
