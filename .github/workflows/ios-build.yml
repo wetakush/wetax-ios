@@ -53,6 +53,7 @@ jobs:
           -exportPath ./build \
           -exportOptionsPlist ExportOptions.plist || echo "Export requires signing, skipping..."
       continue-on-error: true
+      if: success() || failure()
           
     - name: Upload artifacts
       uses: actions/upload-artifact@v4

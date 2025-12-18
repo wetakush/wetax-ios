@@ -11,6 +11,20 @@
 		AA000003 /* ContentView.swift */ = {isa = PBXBuildFile; fileRef = AA000004 /* ContentView.swift */; };
 		AA000005 /* Assets.xcassets */ = {isa = PBXBuildFile; fileRef = AA000006 /* Assets.xcassets */; };
 		AA000007 /* Preview Assets.xcassets */ = {isa = PBXBuildFile; fileRef = AA000008 /* Preview Assets.xcassets */; };
+		AA000020 /* User.swift */ = {isa = PBXBuildFile; fileRef = AA000021 /* User.swift */; };
+		AA000022 /* Ride.swift */ = {isa = PBXBuildFile; fileRef = AA000023 /* Ride.swift */; };
+		AA000024 /* AuthViewModel.swift */ = {isa = PBXBuildFile; fileRef = AA000025 /* AuthViewModel.swift */; };
+		AA000026 /* RideViewModel.swift */ = {isa = PBXBuildFile; fileRef = AA000027 /* RideViewModel.swift */; };
+		AA000028 /* LoginView.swift */ = {isa = PBXBuildFile; fileRef = AA000029 /* LoginView.swift */; };
+		AA000030 /* OrderTaxiView.swift */ = {isa = PBXBuildFile; fileRef = AA000031 /* OrderTaxiView.swift */; };
+		AA000032 /* MapView.swift */ = {isa = PBXBuildFile; fileRef = AA000033 /* MapView.swift */; };
+		AA000034 /* WaitingForDriverView.swift */ = {isa = PBXBuildFile; fileRef = AA000035 /* WaitingForDriverView.swift */; };
+		AA000036 /* RideHistoryView.swift */ = {isa = PBXBuildFile; fileRef = AA000037 /* RideHistoryView.swift */; };
+		AA000038 /* ProfileView.swift */ = {isa = PBXBuildFile; fileRef = AA000039 /* ProfileView.swift */; };
+		AA000040 /* AddressInputView.swift */ = {isa = PBXBuildFile; fileRef = AA000041 /* AddressInputView.swift */; };
+		AA000042 /* LocationService.swift */ = {isa = PBXBuildFile; fileRef = AA000043 /* LocationService.swift */; };
+		AA000044 /* NotificationService.swift */ = {isa = PBXBuildFile; fileRef = AA000045 /* NotificationService.swift */; };
+		AA000046 /* Color+Hex.swift */ = {isa = PBXBuildFile; fileRef = AA000047 /* Color+Hex.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +34,20 @@
 		AA000006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA000008 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		AA00000A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA000021 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		AA000023 /* Ride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ride.swift; sourceTree = "<group>"; };
+		AA000025 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		AA000027 /* RideViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideViewModel.swift; sourceTree = "<group>"; };
+		AA000029 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		AA000031 /* OrderTaxiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTaxiView.swift; sourceTree = "<group>"; };
+		AA000033 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		AA000035 /* WaitingForDriverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingForDriverView.swift; sourceTree = "<group>"; };
+		AA000037 /* RideHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideHistoryView.swift; sourceTree = "<group>"; };
+		AA000039 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		AA000041 /* AddressInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressInputView.swift; sourceTree = "<group>"; };
+		AA000043 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		AA000045 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		AA000047 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,11 +82,65 @@
 			children = (
 				AA000002 /* WeTaxApp.swift */,
 				AA000004 /* ContentView.swift */,
+				AA000048 /* Models */,
+				AA000049 /* ViewModels */,
+				AA00004A /* Views */,
+				AA00004B /* Services */,
+				AA00004C /* Extensions */,
 				AA000006 /* Assets.xcassets */,
 				AA00000A /* Info.plist */,
 				AA00000F /* Preview Content */,
 			);
 			path = WeTax;
+			sourceTree = "<group>";
+		};
+		AA000048 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AA000021 /* User.swift */,
+				AA000023 /* Ride.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AA000049 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				AA000025 /* AuthViewModel.swift */,
+				AA000027 /* RideViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		AA00004A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA000029 /* LoginView.swift */,
+				AA000031 /* OrderTaxiView.swift */,
+				AA000033 /* MapView.swift */,
+				AA000035 /* WaitingForDriverView.swift */,
+				AA000037 /* RideHistoryView.swift */,
+				AA000039 /* ProfileView.swift */,
+				AA000041 /* AddressInputView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AA00004B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AA000043 /* LocationService.swift */,
+				AA000045 /* NotificationService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		AA00004C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				AA000047 /* Color+Hex.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		AA00000F /* Preview Content */ = {
@@ -139,8 +221,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA000003 /* ContentView.swift */,
 				AA000001 /* WeTaxApp.swift */,
+				AA000003 /* ContentView.swift */,
+				AA000020 /* User.swift */,
+				AA000022 /* Ride.swift */,
+				AA000024 /* AuthViewModel.swift */,
+				AA000026 /* RideViewModel.swift */,
+				AA000028 /* LoginView.swift */,
+				AA000030 /* OrderTaxiView.swift */,
+				AA000032 /* MapView.swift */,
+				AA000034 /* WaitingForDriverView.swift */,
+				AA000036 /* RideHistoryView.swift */,
+				AA000038 /* ProfileView.swift */,
+				AA000040 /* AddressInputView.swift */,
+				AA000042 /* LocationService.swift */,
+				AA000044 /* NotificationService.swift */,
+				AA000046 /* Color+Hex.swift */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,4 +448,3 @@
 	};
 	rootObject = AA000014 /* Project object */;
 }
-
