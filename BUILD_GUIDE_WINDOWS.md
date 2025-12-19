@@ -56,6 +56,10 @@
    git push -u origin main
    ```
 
+git add .github/workflows/ios-build.yml
+git commit -m "Update GitHub Actions to v4 (fix deprecated actions)"
+git push origin main
+
 ### Шаг 3: Запуск сборки
 
 1. **Автоматический запуск:**

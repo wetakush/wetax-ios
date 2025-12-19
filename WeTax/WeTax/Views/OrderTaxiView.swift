@@ -93,6 +93,8 @@ struct OrderTaxiView: View {
     
     private func orderTaxi() {
         guard let userId = authViewModel.currentUser?.id,
+              let userName = authViewModel.currentUser?.name,
+              let userPhone = authViewModel.currentUser?.phone,
               let fromLocation = locationService.currentLocation else {
             return
         }
@@ -104,7 +106,7 @@ struct OrderTaxiView: View {
         )
         
         rideViewModel.calculatePrice(from: fromLocation, to: toLocation)
-        rideViewModel.createRide(from: fromLocation, to: toLocation, userId: userId)
+        rideViewModel.createRide(from: fromLocation, to: toLocation, userId: userId, userName: userName, userPhone: userPhone)
     }
 }
 
@@ -171,6 +173,7 @@ struct CarTypeSelectionPanel: View {
                             
                             Text(carType.rawValue)
                                 .font(.caption)
+                                .foregroundColor(selectedCarType == carType ? Color(hex: "007AFF") : .gray)
                             
                             Text("\(Int(carType.basePrice))₽")
                                 .font(.caption2)
@@ -195,6 +198,7 @@ struct CarTypeSelectionPanel: View {
                         Text("\(Int(estimatedPrice))₽")
                             .font(.title2)
                             .fontWeight(.bold)
+                            .foregroundColor(.black)
                     }
                     
                     Spacer()
@@ -206,6 +210,7 @@ struct CarTypeSelectionPanel: View {
                         Text("~\(estimatedTime) мин")
                             .font(.title2)
                             .fontWeight(.bold)
+                            .foregroundColor(.black)
                     }
                 }
                 .padding()

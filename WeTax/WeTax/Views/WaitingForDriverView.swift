@@ -23,10 +23,34 @@ struct WaitingForDriverView: View {
                     Text(rideViewModel.currentRide?.status.rawValue ?? "Поиск водителя")
                         .font(.title2)
                         .fontWeight(.semibold)
+                        .foregroundColor(.black)
                     
                     Text("Ищем подходящего водителя...")
                         .font(.subheadline)
                         .foregroundColor(.gray)
+                    
+                    // Показываем доступные машины через 2 секунды
+                    if !rideViewModel.availableCars.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Доступные автомобили:")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            
+                            ForEach(rideViewModel.availableCars, id: \.self) { car in
+                                HStack {
+                                    Image(systemName: "car.fill")
+                                        .foregroundColor(Color(hex: "007AFF"))
+                                    Text(car)
+                                        .font(.subheadline)
+                                        .foregroundColor(.black)
+                                }
+                            }
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(12)
+                        .padding(.top, 8)
+                    }
                 } else if let driver = rideViewModel.driver {
                     // Информация о водителе
                     VStack(spacing: 16) {
@@ -44,6 +68,7 @@ struct WaitingForDriverView: View {
                         Text(driver.name)
                             .font(.title3)
                             .fontWeight(.semibold)
+                            .foregroundColor(.black)
                         
                         HStack {
                             Image(systemName: "star.fill")
@@ -61,6 +86,7 @@ struct WaitingForDriverView: View {
                                 Text(driver.carModel)
                                     .font(.subheadline)
                                     .fontWeight(.medium)
+                                    .foregroundColor(.black)
                             }
                             
                             VStack {
@@ -70,6 +96,7 @@ struct WaitingForDriverView: View {
                                 Text(driver.carNumber)
                                     .font(.subheadline)
                                     .fontWeight(.medium)
+                                    .foregroundColor(.black)
                             }
                         }
                         .padding()

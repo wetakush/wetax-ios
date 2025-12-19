@@ -55,6 +55,7 @@ struct RideHistoryRow: View {
                 
                 Text(ride.carType.rawValue)
                     .font(.headline)
+                    .foregroundColor(.black)
                 
                 Spacer()
                 

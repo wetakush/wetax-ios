@@ -47,6 +47,29 @@ struct MainTabView: View {
                 .tag(2)
         }
         .accentColor(Color(hex: "007AFF"))
+        .onAppear {
+            // Настройка внешнего вида TabBar с белой заливкой
+            let appearance = UITabBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = UIColor.white
+            
+            // Цвет невыбранных иконок и текста
+            appearance.stackedLayoutAppearance.normal.iconColor = UIColor.gray
+            appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
+                .foregroundColor: UIColor.gray,
+                .font: UIFont.systemFont(ofSize: 10)
+            ]
+            
+            // Цвет выбранных иконок и текста
+            appearance.stackedLayoutAppearance.selected.iconColor = UIColor(hex: "007AFF")
+            appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
+                .foregroundColor: UIColor(hex: "007AFF"),
+                .font: UIFont.systemFont(ofSize: 10, weight: .medium)
+            ]
+            
+            UITabBar.appearance().standardAppearance = appearance
+            UITabBar.appearance().scrollEdgeAppearance = appearance
+        }
     }
 }
 

@@ -107,5 +107,21 @@ struct Driver: Codable {
     var carNumber: String
     var rating: Double
     var location: LocationCoordinate
+    
+    static func getAvailableCars(for carType: CarType) -> [String] {
+        switch carType {
+        case .economy:
+            return ["Renault Logan"]
+        case .comfort:
+            return ["Haval Jolion", "Kaiyi E5"]
+        case .business:
+            return ["Maybach", "BMW F90"]
+        }
+    }
+    
+    static func getRandomCar(for carType: CarType) -> String {
+        let cars = getAvailableCars(for: carType)
+        return cars.randomElement() ?? cars[0]
+    }
 }
 

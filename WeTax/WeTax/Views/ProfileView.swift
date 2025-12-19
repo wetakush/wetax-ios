@@ -29,6 +29,7 @@ struct ProfileView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(authViewModel.currentUser?.name ?? "Пользователь")
                                 .font(.headline)
+                                .foregroundColor(.black)
                             
                             Text(authViewModel.currentUser?.phone ?? "")
                                 .font(.subheadline)

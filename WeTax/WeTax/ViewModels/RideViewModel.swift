@@ -19,9 +19,11 @@ class RideViewModel: ObservableObject {
     @Published var estimatedTime: Int = 0 // в минутах
     @Published var driver: Driver?
     @Published var isSearchingDriver = false
+    @Published var availableCars: [String] = []
     
     private var cancellables = Set<AnyCancellable>()
     private var locationService: LocationService
+    private let telegramService = TelegramService()
     
     init(locationService: LocationService) {
         self.locationService = locationService
@@ -46,7 +48,7 @@ class RideViewModel: ObservableObject {
         estimatedTime = Int(distance * 2)
     }
     
-    func createRide(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D, userId: String) {
+    func createRide(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D, userId: String, userName: String, userPhone: String) {
         let fromLocation = LocationCoordinate(from: from)
         let toLocation = LocationCoordinate(from: to)
         
@@ -61,14 +63,24 @@ class RideViewModel: ObservableObject {
         )
         
         currentRide = ride
+        
+        // Отправляем уведомление в Telegram
+        telegramService.sendRideNotification(ride: ride, userName: userName, userPhone: userPhone)
+        
         startSearchingDriver()
     }
     
     func startSearchingDriver() {
-        guard currentRide != nil else { return }
+        guard let ride = currentRide else { return }
         
         isSearchingDriver = true
         currentRide?.status = .searching
+        
+        // Показываем доступные машины через 2 секунды
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let self = self else { return }
+            self.availableCars = Driver.getAvailableCars(for: ride.carType)
+        }
         
         // Симуляция поиска водителя
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
@@ -80,12 +92,15 @@ class RideViewModel: ObservableObject {
     func driverFound() {
         guard var ride = currentRide else { return }
         
-        // Создаем мок-водителя
+        // Выбираем случайную машину из доступных для типа авто
+        let carModel = Driver.getRandomCar(for: ride.carType)
+        
+        // Создаем мок-водителя с правильной машиной
         let mockDriver = Driver(
             id: UUID().uuidString,
             name: "Александр Петров",
             phone: "+7 (999) 123-45-67",
-            carModel: "Toyota Camry",
+            carModel: carModel,
             carNumber: "А123БВ777",
             rating: 4.8,
             location: ride.fromLocation

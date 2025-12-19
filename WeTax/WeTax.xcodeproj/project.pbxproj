@@ -25,6 +25,8 @@
 		AA000042 /* LocationService.swift */ = {isa = PBXBuildFile; fileRef = AA000043 /* LocationService.swift */; };
 		AA000044 /* NotificationService.swift */ = {isa = PBXBuildFile; fileRef = AA000045 /* NotificationService.swift */; };
 		AA000046 /* Color+Hex.swift */ = {isa = PBXBuildFile; fileRef = AA000047 /* Color+Hex.swift */; };
+		AA000050 /* TelegramService.swift */ = {isa = PBXBuildFile; fileRef = AA000051 /* TelegramService.swift */; };
+		AA000052 /* UIColor+Hex.swift */ = {isa = PBXBuildFile; fileRef = AA000053 /* UIColor+Hex.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +50,8 @@
 		AA000043 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		AA000045 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		AA000047 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
+		AA000051 /* TelegramService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelegramService.swift; sourceTree = "<group>"; };
+		AA000053 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +135,7 @@
 			children = (
 				AA000043 /* LocationService.swift */,
 				AA000045 /* NotificationService.swift */,
+				AA000051 /* TelegramService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -139,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				AA000047 /* Color+Hex.swift */,
+				AA000053 /* UIColor+Hex.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -237,6 +243,8 @@
 				AA000042 /* LocationService.swift */,
 				AA000044 /* NotificationService.swift */,
 				AA000046 /* Color+Hex.swift */,
+				AA000050 /* TelegramService.swift */,
+				AA000052 /* UIColor+Hex.swift */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
