@@ -45,20 +45,58 @@ jobs:
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO || echo "Archive completed with warnings"
           
+    - name: Find and copy archive
+      run: |
+        cd WeTax
+        mkdir -p build
+        
+        # Ищем .app в DerivedData (где xcodebuild создает по умолчанию)
+        APP_PATH=$(find "$HOME/Library/Developer/Xcode/DerivedData" -path "*/ArchiveIntermediates/WeTax/InstallationBuildProductsLocation/Applications/WeTax.app" -type d 2>/dev/null | head -1)
+        
+        if [ -n "$APP_PATH" ]; then
+          echo "✅ Found WeTax.app in DerivedData"
+          # Создаем структуру .xcarchive
+          mkdir -p ./build/WeTax.xcarchive/Products/Applications
+          cp -R "$APP_PATH" ./build/WeTax.xcarchive/Products/Applications/ 2>/dev/null
+          echo "✅ Archive created at ./build/WeTax.xcarchive"
+        elif [ -d "./build/WeTax.xcarchive" ]; then
+          echo "✅ Archive already in ./build/"
+        else
+          echo "⚠️ Archive not found"
+        fi
+      continue-on-error: true
+          
     - name: Export IPA
       run: |
         cd WeTax
-        xcodebuild -exportArchive \
-          -archivePath ./build/WeTax.xcarchive \
-          -exportPath ./build \
-          -exportOptionsPlist ExportOptions.plist || echo "Export requires signing, skipping..."
+        if [ -d "./build/WeTax.xcarchive" ]; then
+          xcodebuild -exportArchive \
+            -archivePath ./build/WeTax.xcarchive \
+            -exportPath ./build \
+            -exportOptionsPlist ExportOptions.plist || echo "Export requires signing, skipping..."
+        else
+          echo "Archive not found, skipping export"
+        fi
       continue-on-error: true
-      if: success() || failure()
           
+    - name: List build artifacts
+      run: |
+        cd WeTax
+        echo "=== Содержимое build/ ==="
+        ls -la build/ || echo "Папка build не найдена"
+        echo ""
+        echo "=== Поиск архива ==="
+        find . -name "*.xcarchive" -type d 2>/dev/null || echo "Архив не найден"
+        find . -name "*.ipa" -type f 2>/dev/null || echo "IPA не найден"
+      continue-on-error: true
+      
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: WeTax-build
-        path: WeTax/build/
+        path: |
+          WeTax/build/
+          WeTax/export/
+        retention-days: 7
 
