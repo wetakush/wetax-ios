@@ -10,6 +10,7 @@ import SwiftUI
 struct WaitingForDriverView: View {
     @ObservedObject var rideViewModel: RideViewModel
     @State private var progress: Double = 0
+    @State private var showCompletion = false
     
     var body: some View {
         VStack(spacing: 20) {
@@ -121,6 +122,27 @@ struct WaitingForDriverView: View {
                             .foregroundColor(.white)
                             .cornerRadius(12)
                         }
+                        
+                        // Кнопка завершения поездки (для симуляции)
+                        if rideViewModel.currentRide?.status == .inProgress {
+                            Button(action: {
+                                // Симулируем завершение поездки
+                                if var ride = rideViewModel.currentRide {
+                                    ride.status = .completed
+                                    ride.completedAt = Date()
+                                    rideViewModel.completeRide()
+                                    showCompletion = true
+                                }
+                            }) {
+                                Text("Завершить поездку")
+                                    .fontWeight(.medium)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(12)
+                            }
+                        }
                     }
                 }
             }
@@ -142,6 +164,13 @@ struct WaitingForDriverView: View {
                         .foregroundColor(.red)
                         .cornerRadius(12)
                 }
+            }
+        }
+        .sheet(isPresented: $showCompletion) {
+            if let ride = rideViewModel.ridesHistory.first, let driver = rideViewModel.driver {
+                RideCompletionView(ride: ride, driver: driver)
+            } else if let ride = rideViewModel.currentRide, let driver = rideViewModel.driver {
+                RideCompletionView(ride: ride, driver: driver)
             }
         }
     }

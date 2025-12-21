@@ -11,6 +11,30 @@ struct RideHistoryView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @StateObject private var rideViewModel = RideViewModel(locationService: LocationService())
     
+    var groupedRides: [String: [Ride]] {
+        Dictionary(grouping: rideViewModel.ridesHistory) { ride in
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "ru_RU")
+            
+            if Calendar.current.isDateInToday(ride.createdAt) {
+                return "Сегодня"
+            } else if Calendar.current.isDateInYesterday(ride.createdAt) {
+                return "Вчера"
+            } else {
+                formatter.dateFormat = "d MMMM, EEEE"
+                return formatter.string(from: ride.createdAt)
+            }
+        }
+    }
+    
+    var sortedKeys: [String] {
+        groupedRides.keys.sorted { key1, key2 in
+            let date1 = getDate(for: key1)
+            let date2 = getDate(for: key2)
+            return date1 > date2
+        }
+    }
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -30,16 +54,44 @@ struct RideHistoryView: View {
                             .multilineTextAlignment(.center)
                     }
                 } else {
-                    List {
-                        ForEach(rideViewModel.ridesHistory) { ride in
-                            RideHistoryRow(ride: ride)
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            ForEach(sortedKeys, id: \.self) { key in
+                                if let rides = groupedRides[key] {
+                                    Section(header: Text(key)
+                                        .font(.headline)
+                                        .foregroundColor(.black)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal)
+                                        .padding(.top, 16)
+                                        .padding(.bottom, 8)) {
+                                        ForEach(rides) { ride in
+                                            RideHistoryRow(ride: ride)
+                                        }
+                                    }
+                                }
+                            }
                         }
+                        .padding(.bottom, 20)
                     }
-                    .listStyle(PlainListStyle())
+                    .background(Color.gray.opacity(0.1))
                 }
             }
             .navigationTitle("История поездок")
             .navigationBarTitleDisplayMode(.large)
+        }
+    }
+    
+    private func getDate(for key: String) -> Date {
+        if key == "Сегодня" {
+            return Date()
+        } else if key == "Вчера" {
+            return Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+        } else {
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "ru_RU")
+            formatter.dateFormat = "d MMMM, EEEE"
+            return formatter.date(from: key) ?? Date()
         }
     }
 }
@@ -51,59 +103,86 @@ struct RideHistoryRow: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: ride.carType.icon)
-                    .foregroundColor(Color(hex: "007AFF"))
-                
-                Text(ride.carType.rawValue)
-                    .font(.headline)
-                    .foregroundColor(.black)
-                
-                Spacer()
-                
-                Text("\(Int(ride.price))₽")
-                    .font(.headline)
-                    .foregroundColor(Color(hex: "007AFF"))
-            }
-            
-            VStack(alignment: .leading, spacing: 6) {
-                HStack {
-                    Circle()
-                        .fill(Color(hex: "007AFF"))
-                        .frame(width: 6, height: 6)
-                    Text(ride.fromAddress)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
-                
-                HStack {
-                    Circle()
-                        .fill(Color.red)
-                        .frame(width: 6, height: 6)
-                    Text(ride.toAddress)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
-            }
-            
-            HStack {
-                Text(ride.status.rawValue)
-                    .font(.caption)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(statusColor(ride.status).opacity(0.2))
-                    .foregroundColor(statusColor(ride.status))
-                    .cornerRadius(8)
-                
-                Spacer()
-                
-                Text(dateFormatter.string(from: ride.completedAt ?? ride.createdAt))
-                    .font(.caption)
                     .foregroundColor(.gray)
+                    .frame(width: 20)
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack {
+                        Text("Такси \(ride.carType.rawValue), \(formatTime(ride.createdAt))")
+                            .font(.subheadline)
+                            .foregroundColor(.black)
+                        
+                        if ride.status == .cancelled {
+                            Text("Отменено")
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
+                    }
+                    
+                    Text("\(ride.fromAddress), \(ride.toAddress)")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .lineLimit(1)
+                }
+                
+                Spacer()
+                
+                Text(ride.status == .cancelled ? "0 ₽" : "\(Int(ride.price)) ₽")
+                    .font(.headline)
+                    .foregroundColor(ride.status == .cancelled ? .gray : Color(hex: "007AFF"))
+            }
+            
+            // Кнопки действий (только для завершенных поездок)
+            if ride.status == .completed {
+                HStack(spacing: 12) {
+                    Button(action: {
+                        if let phone = ride.driverPhone {
+                            if let url = URL(string: "tel://\(phone.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "-", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: ""))") {
+                                UIApplication.shared.open(url)
+                            }
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "phone.fill")
+                            Text("Позвонить")
+                        }
+                        .font(.subheadline)
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                    }
+                    
+                    Button(action: {}) {
+                        HStack {
+                            Image(systemName: "headphones")
+                            Text("Помощь")
+                        }
+                        .font(.subheadline)
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                    }
+                }
             }
         }
         .padding()
         .background(Color.white)
-        .cornerRadius(12)
-        .shadow(radius: 2)
+        .overlay(
+            Rectangle()
+                .frame(height: 0.5)
+                .foregroundColor(Color.gray.opacity(0.2)),
+            alignment: .bottom
+        )
+    }
+    
+    private func formatTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: date)
     }
     
     private func statusColor(_ status: RideStatus) -> Color {

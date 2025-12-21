@@ -123,6 +123,11 @@ class RideViewModel: ObservableObject {
         guard var ride = currentRide else { return }
         ride.status = .driverArriving
         currentRide = ride
+        
+        // Автоматически переключаемся на "В пути" через несколько секунд
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+            self?.startRide()
+        }
     }
     
     func startRide() {

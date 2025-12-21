@@ -12,59 +12,99 @@ struct ProfileView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                // Профиль пользователя
-                Section {
-                    HStack(spacing: 16) {
-                        Circle()
-                            .fill(Color(hex: "007AFF").opacity(0.2))
-                            .frame(width: 60, height: 60)
-                            .overlay(
-                                Text(authViewModel.currentUser?.name.prefix(1) ?? "U")
-                                    .font(.title2)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(Color(hex: "007AFF"))
-                            )
-                        
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(authViewModel.currentUser?.name ?? "Пользователь")
-                                .font(.headline)
-                                .foregroundColor(.black)
+            ZStack {
+                Color.gray.opacity(0.1).ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(spacing: 0) {
+                        // Профиль пользователя
+                        HStack(spacing: 16) {
+                            Circle()
+                                .fill(Color.gray.opacity(0.2))
+                                .frame(width: 60, height: 60)
+                                .overlay(
+                                    Image(systemName: "person.fill")
+                                        .font(.title2)
+                                        .foregroundColor(.gray)
+                                )
                             
-                            Text(authViewModel.currentUser?.phone ?? "")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
-                    }
-                    .padding(.vertical, 8)
-                }
-                
-                // Настройки
-                Section("Настройки") {
-                    NavigationLink(destination: PaymentMethodsView()) {
-                        Label("Способы оплаты", systemImage: "creditcard.fill")
-                    }
-                    
-                    NavigationLink(destination: NotificationsSettingsView()) {
-                        Label("Уведомления", systemImage: "bell.fill")
-                    }
-                    
-                    NavigationLink(destination: AboutView()) {
-                        Label("О приложении", systemImage: "info.circle.fill")
-                    }
-                }
-                
-                // Выход
-                Section {
-                    Button(action: {
-                        authViewModel.logout()
-                    }) {
-                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(authViewModel.currentUser?.name ?? "Пользователь")
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                                
+                                Text(authViewModel.currentUser?.phone ?? "")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                            
                             Spacer()
+                        }
+                        .padding()
+                        .background(Color.white)
+                        
+                        // Меню
+                        VStack(spacing: 0) {
+                            ProfileMenuItem(
+                                title: "История заказов",
+                                icon: "clock.fill",
+                                destination: AnyView(RideHistoryView())
+                            )
+                            
+                            ProfileMenuItem(
+                                title: "Способы оплаты",
+                                icon: "creditcard.fill",
+                                subtitle: "СБП · Т-Банк",
+                                iconColor: .yellow,
+                                destination: AnyView(PaymentMethodsView())
+                            )
+                            
+                            ProfileMenuItem(
+                                title: "Служба поддержки",
+                                icon: "headphones",
+                                destination: AnyView(SupportView())
+                            )
+                            
+                            ProfileMenuItem(
+                                title: "Мои адреса",
+                                icon: "mappin.circle.fill",
+                                destination: AnyView(AddressesView())
+                            )
+                            
+                            ProfileMenuItem(
+                                title: "Скидки и подарки",
+                                icon: "gift.fill",
+                                subtitle: "Ввести промокод",
+                                destination: AnyView(PromoCodesView())
+                            )
+                            
+                            ProfileMenuItem(
+                                title: "Настройки",
+                                icon: "gearshape.fill",
+                                destination: AnyView(SettingsView())
+                            )
+                            
+                            ProfileMenuItem(
+                                title: "Информация",
+                                icon: "info.circle.fill",
+                                destination: AnyView(AboutView())
+                            )
+                        }
+                        .background(Color.white)
+                        .padding(.top, 8)
+                        
+                        // Кнопка выхода
+                        Button(action: {
+                            authViewModel.logout()
+                        }) {
                             Text("Выйти")
+                                .font(.headline)
                                 .foregroundColor(.red)
-                            Spacer()
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.white)
                         }
+                        .padding(.top, 8)
                     }
                 }
             }
@@ -74,33 +114,80 @@ struct ProfileView: View {
     }
 }
 
-struct PaymentMethodsView: View {
+struct ProfileMenuItem: View {
+    let title: String
+    let icon: String
+    var subtitle: String? = nil
+    var iconColor: Color = Color(hex: "007AFF")
+    let destination: AnyView
+    
+    var body: some View {
+        NavigationLink(destination: destination) {
+            HStack {
+                Image(systemName: icon)
+                    .foregroundColor(iconColor)
+                    .frame(width: 24)
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .foregroundColor(.black)
+                        .font(.body)
+                    
+                    if let subtitle = subtitle {
+                        Text(subtitle)
+                            .foregroundColor(.gray)
+                            .font(.caption)
+                    }
+                }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+            .padding()
+            .background(Color.white)
+            .overlay(
+                Rectangle()
+                    .frame(height: 0.5)
+                    .foregroundColor(Color.gray.opacity(0.2)),
+                alignment: .bottom
+            )
+        }
+    }
+}
+
+struct AddressesView: View {
     var body: some View {
         List {
-            Section {
-                HStack {
-                    Image(systemName: "creditcard.fill")
-                        .foregroundColor(Color(hex: "007AFF"))
-                    Text("Карта •••• 1234")
-                        .font(.headline)
-                    Spacer()
-                    Image(systemName: "checkmark")
-                        .foregroundColor(.green)
-                }
-            } header: {
-                Text("Текущий способ оплаты")
-            }
-            
-            Section {
-                Button(action: {}) {
-                    Label("Добавить карту", systemImage: "plus.circle.fill")
-                }
-            }
+            Text("Мои адреса")
         }
-        .navigationTitle("Способы оплаты")
+        .navigationTitle("Мои адреса")
         .navigationBarTitleDisplayMode(.inline)
     }
 }
+
+struct PromoCodesView: View {
+    var body: some View {
+        List {
+            Text("Промокоды")
+        }
+        .navigationTitle("Скидки и подарки")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+struct SettingsView: View {
+    var body: some View {
+        List {
+            Text("Настройки")
+        }
+        .navigationTitle("Настройки")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
 
 struct NotificationsSettingsView: View {
     @State private var pushEnabled = true

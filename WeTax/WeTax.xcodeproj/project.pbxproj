@@ -27,6 +27,9 @@
 		AA000046 /* Color+Hex.swift */ = {isa = PBXBuildFile; fileRef = AA000047 /* Color+Hex.swift */; };
 		AA000050 /* TelegramService.swift */ = {isa = PBXBuildFile; fileRef = AA000051 /* TelegramService.swift */; };
 		AA000052 /* UIColor+Hex.swift */ = {isa = PBXBuildFile; fileRef = AA000053 /* UIColor+Hex.swift */; };
+		AA000054 /* RideCompletionView.swift */ = {isa = PBXBuildFile; fileRef = AA000055 /* RideCompletionView.swift */; };
+		AA000056 /* PaymentMethodsView.swift */ = {isa = PBXBuildFile; fileRef = AA000057 /* PaymentMethodsView.swift */; };
+		AA000058 /* SupportView.swift */ = {isa = PBXBuildFile; fileRef = AA000059 /* SupportView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +55,9 @@
 		AA000047 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		AA000051 /* TelegramService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelegramService.swift; sourceTree = "<group>"; };
 		AA000053 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
+		AA000055 /* RideCompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideCompletionView.swift; sourceTree = "<group>"; };
+		AA000057 /* PaymentMethodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodsView.swift; sourceTree = "<group>"; };
+		AA000059 /* SupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +132,9 @@
 				AA000037 /* RideHistoryView.swift */,
 				AA000039 /* ProfileView.swift */,
 				AA000041 /* AddressInputView.swift */,
+				AA000055 /* RideCompletionView.swift */,
+				AA000057 /* PaymentMethodsView.swift */,
+				AA000059 /* SupportView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -245,6 +254,9 @@
 				AA000046 /* Color+Hex.swift */,
 				AA000050 /* TelegramService.swift */,
 				AA000052 /* UIColor+Hex.swift */,
+				AA000054 /* RideCompletionView.swift */,
+				AA000056 /* PaymentMethodsView.swift */,
+				AA000058 /* SupportView.swift */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

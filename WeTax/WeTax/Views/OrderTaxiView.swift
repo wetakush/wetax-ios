@@ -117,38 +117,42 @@ struct AddressInputPanel: View {
     var onSearch: () -> Void
     
     var body: some View {
-        VStack(spacing: 12) {
-            HStack {
-                Circle()
-                    .fill(Color(hex: "007AFF"))
-                    .frame(width: 8, height: 8)
+        VStack(spacing: 0) {
+            HStack(spacing: 12) {
+                Image(systemName: "line.3.horizontal")
+                    .foregroundColor(.black)
+                    .font(.title3)
                 
-                TextField("Откуда", text: $fromAddress)
-                    .padding(.vertical, 12)
-                    .padding(.horizontal, 12)
-                    .background(Color.white)
-                    .cornerRadius(8)
-            }
-            
-            HStack {
-                Circle()
-                    .fill(Color.red)
-                    .frame(width: 8, height: 8)
-                
-                TextField("Куда", text: $toAddress)
-                    .padding(.vertical, 12)
-                    .padding(.horizontal, 12)
-                    .background(Color.white)
-                    .cornerRadius(8)
-                    .onTapGesture {
-                        onSearch()
+                VStack(spacing: 8) {
+                    HStack {
+                        Circle()
+                            .fill(Color(hex: "007AFF"))
+                            .frame(width: 8, height: 8)
+                        
+                        TextField("От: Комарова 9", text: $fromAddress)
+                            .font(.subheadline)
+                            .foregroundColor(.black)
                     }
+                    
+                    HStack {
+                        Rectangle()
+                            .fill(Color.black)
+                            .frame(width: 8, height: 8)
+                        
+                        TextField("Куда?", text: $toAddress)
+                            .font(.subheadline)
+                            .foregroundColor(.black)
+                            .onTapGesture {
+                                onSearch()
+                            }
+                    }
+                }
             }
+            .padding()
         }
-        .padding()
         .background(Color.white)
-        .cornerRadius(16)
-        .shadow(radius: 10)
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 2)
     }
 }
 
@@ -161,7 +165,7 @@ struct CarTypeSelectionPanel: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            // Выбор типа авто
+            // Выбор типа авто в виде карточек
             HStack(spacing: 12) {
                 ForEach(CarType.allCases, id: \.self) { carType in
                     Button(action: {
@@ -169,70 +173,106 @@ struct CarTypeSelectionPanel: View {
                     }) {
                         VStack(spacing: 8) {
                             Image(systemName: carType.icon)
-                                .font(.title2)
+                                .font(.title3)
                             
                             Text(carType.rawValue)
                                 .font(.caption)
-                                .foregroundColor(selectedCarType == carType ? Color(hex: "007AFF") : .gray)
+                                .fontWeight(.medium)
                             
-                            Text("\(Int(carType.basePrice))₽")
+                            Text("\(Int(calculatePrice(for: carType))) ₽")
                                 .font(.caption2)
-                                .foregroundColor(.gray)
+                                .fontWeight(.semibold)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(selectedCarType == carType ? Color(hex: "007AFF").opacity(0.1) : Color.gray.opacity(0.1))
-                        .foregroundColor(selectedCarType == carType ? Color(hex: "007AFF") : .gray)
+                        .padding(.vertical, 16)
+                        .background(selectedCarType == carType ? Color(hex: "007AFF") : Color.white)
+                        .foregroundColor(selectedCarType == carType ? .white : .black)
                         .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(selectedCarType == carType ? Color.clear : Color.gray.opacity(0.3), lineWidth: 1)
+                        )
+                        .shadow(color: selectedCarType == carType ? Color(hex: "007AFF").opacity(0.3) : Color.clear, radius: 8, x: 0, y: 4)
                     }
                 }
             }
             
             // Информация о поездке
             if estimatedPrice > 0 {
-                HStack {
+                HStack(spacing: 16) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Примерная стоимость")
+                        Text("Откуда")
                             .font(.caption)
                             .foregroundColor(.gray)
-                        Text("\(Int(estimatedPrice))₽")
-                            .font(.title2)
-                            .fontWeight(.bold)
+                        Text("Комарова 9")
+                            .font(.subheadline)
                             .foregroundColor(.black)
                     }
                     
                     Spacer()
                     
                     VStack(alignment: .trailing, spacing: 4) {
-                        Text("Время в пути")
+                        Text("Куда")
                             .font(.caption)
                             .foregroundColor(.gray)
-                        Text("~\(estimatedTime) мин")
-                            .font(.title2)
-                            .fontWeight(.bold)
+                        Text("Куряночка • \(estimatedTime) мин")
+                            .font(.subheadline)
                             .foregroundColor(.black)
                     }
                 }
                 .padding()
-                .background(Color.gray.opacity(0.1))
+                .background(Color.gray.opacity(0.05))
                 .cornerRadius(12)
             }
             
             // Кнопка заказа
-            Button(action: onOrder) {
-                Text("Заказать такси")
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color(hex: "007AFF"))
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
+            HStack {
+                // Логотип
+                ZStack {
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(Color.yellow)
+                        .frame(width: 30, height: 30)
+                    Text("T")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundColor(.black)
+                }
+                
+                Button(action: onOrder) {
+                    Text("Вызвать")
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.black)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
+                
+                // Иконка настроек
+                Button(action: {}) {
+                    Image(systemName: "line.3.horizontal")
+                        .foregroundColor(.black)
+                        .frame(width: 30, height: 30)
+                }
             }
         }
         .padding()
         .background(Color.white)
         .cornerRadius(20)
-        .shadow(radius: 10)
+        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: -2)
+    }
+    
+    private func calculatePrice(for carType: CarType) -> Double {
+        if estimatedPrice > 0 {
+            let multiplier: Double
+            switch carType {
+            case .economy: multiplier = 1.0
+            case .comfort: multiplier = 1.4
+            case .business: multiplier = 2.0
+            }
+            return estimatedPrice * multiplier
+        }
+        return carType.basePrice
     }
 }
 
