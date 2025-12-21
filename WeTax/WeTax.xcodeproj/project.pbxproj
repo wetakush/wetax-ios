@@ -30,6 +30,9 @@
 		AA000054 /* RideCompletionView.swift */ = {isa = PBXBuildFile; fileRef = AA000055 /* RideCompletionView.swift */; };
 		AA000056 /* PaymentMethodsView.swift */ = {isa = PBXBuildFile; fileRef = AA000057 /* PaymentMethodsView.swift */; };
 		AA000058 /* SupportView.swift */ = {isa = PBXBuildFile; fileRef = AA000059 /* SupportView.swift */; };
+		AA000060 /* CarSelectionView.swift */ = {isa = PBXBuildFile; fileRef = AA000061 /* CarSelectionView.swift */; };
+		AA000062 /* MusicSelectionView.swift */ = {isa = PBXBuildFile; fileRef = AA000063 /* MusicSelectionView.swift */; };
+		AA000064 /* SupportChatView.swift */ = {isa = PBXBuildFile; fileRef = AA000065 /* SupportChatView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +61,9 @@
 		AA000055 /* RideCompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideCompletionView.swift; sourceTree = "<group>"; };
 		AA000057 /* PaymentMethodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodsView.swift; sourceTree = "<group>"; };
 		AA000059 /* SupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportView.swift; sourceTree = "<group>"; };
+		AA000061 /* CarSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarSelectionView.swift; sourceTree = "<group>"; };
+		AA000063 /* MusicSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSelectionView.swift; sourceTree = "<group>"; };
+		AA000065 /* SupportChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportChatView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +141,9 @@
 				AA000055 /* RideCompletionView.swift */,
 				AA000057 /* PaymentMethodsView.swift */,
 				AA000059 /* SupportView.swift */,
+				AA000061 /* CarSelectionView.swift */,
+				AA000063 /* MusicSelectionView.swift */,
+				AA000065 /* SupportChatView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -257,6 +266,9 @@
 				AA000054 /* RideCompletionView.swift */,
 				AA000056 /* PaymentMethodsView.swift */,
 				AA000058 /* SupportView.swift */,
+				AA000060 /* CarSelectionView.swift */,
+				AA000062 /* MusicSelectionView.swift */,
+				AA000064 /* SupportChatView.swift */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -48,10 +48,10 @@ struct MainTabView: View {
         }
         .accentColor(Color(hex: "007AFF"))
         .onAppear {
-            // Настройка внешнего вида TabBar с белой заливкой
+            // Настройка внешнего вида TabBar с черной заливкой
             let appearance = UITabBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = UIColor.white
+            appearance.backgroundColor = UIColor.black
             
             // Цвет невыбранных иконок и текста
             appearance.stackedLayoutAppearance.normal.iconColor = UIColor.gray
@@ -61,9 +61,9 @@ struct MainTabView: View {
             ]
             
             // Цвет выбранных иконок и текста
-            appearance.stackedLayoutAppearance.selected.iconColor = UIColor(hex: "007AFF")
+            appearance.stackedLayoutAppearance.selected.iconColor = UIColor.white
             appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
-                .foregroundColor: UIColor(hex: "007AFF"),
+                .foregroundColor: UIColor.white,
                 .font: UIFont.systemFont(ofSize: 10, weight: .medium)
             ]
             

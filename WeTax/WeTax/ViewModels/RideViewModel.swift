@@ -20,6 +20,10 @@ class RideViewModel: ObservableObject {
     @Published var driver: Driver?
     @Published var isSearchingDriver = false
     @Published var availableCars: [String] = []
+    @Published var availableDrivers: [Driver] = []
+    @Published var selectedCarModel: String? = nil
+    @Published var showCarSelection = false
+    @Published var showMusicSelection = false
     
     private var cancellables = Set<AnyCancellable>()
     private var locationService: LocationService
@@ -40,12 +44,12 @@ class RideViewModel: ObservableObject {
         let toLocation = CLLocation(latitude: to.latitude, longitude: to.longitude)
         let distance = fromLocation.distance(from: toLocation) / 1000.0 // в километрах
         
-        // Расчет стоимости (базовая цена + цена за км)
-        let pricePerKm = selectedCarType.basePrice * 0.1
+        // Расчет стоимости (базовая цена + цена за км в зависимости от тарифа)
+        let pricePerKm = selectedCarType.pricePerKm
         estimatedPrice = selectedCarType.basePrice + (distance * pricePerKm)
         
         // Расчет времени (примерно 2 минуты на км в городе)
-        estimatedTime = Int(distance * 2)
+        estimatedTime = max(5, Int(distance * 2))
     }
     
     func createRide(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D, userId: String, userName: String, userPhone: String) {
@@ -76,10 +80,20 @@ class RideViewModel: ObservableObject {
         isSearchingDriver = true
         currentRide?.status = .searching
         
+        // Получаем доступных водителей для типа авто
+        availableDrivers = Driver.getDrivers(for: ride.carType)
+        availableCars = Driver.getAvailableCars(for: ride.carType)
+        
+        // Для бизнеса показываем выбор машины
+        if ride.carType == .business {
+            showCarSelection = true
+            return
+        }
+        
         // Показываем доступные машины через 2 секунды
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             guard let self = self else { return }
-            self.availableCars = Driver.getAvailableCars(for: ride.carType)
+            // Продолжаем поиск
         }
         
         // Симуляция поиска водителя
@@ -89,27 +103,38 @@ class RideViewModel: ObservableObject {
         }
     }
     
+    func selectCarAndDriver(carModel: String) {
+        selectedCarModel = carModel
+        showCarSelection = false
+        
+        // Находим водителя с выбранной машиной
+        if let selectedDriver = Driver.getDriver(for: selectedCarType, carModel: carModel) {
+            driver = selectedDriver
+            if var ride = currentRide {
+                ride.driverId = selectedDriver.id
+                ride.driverName = selectedDriver.name
+                ride.driverPhone = selectedDriver.phone
+                ride.status = .driverFound
+                currentRide = ride
+            }
+            
+            // Симуляция прибытия водителя
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+                self?.driverArriving()
+            }
+        }
+    }
+    
     func driverFound() {
         guard var ride = currentRide else { return }
         
-        // Выбираем случайную машину из доступных для типа авто
-        let carModel = Driver.getRandomCar(for: ride.carType)
+        // Выбираем случайного водителя для типа авто
+        let selectedDriver = Driver.getRandomDriver(for: ride.carType)
         
-        // Создаем мок-водителя с правильной машиной
-        let mockDriver = Driver(
-            id: UUID().uuidString,
-            name: "Александр Петров",
-            phone: "+7 (999) 123-45-67",
-            carModel: carModel,
-            carNumber: "А123БВ777",
-            rating: 4.8,
-            location: ride.fromLocation
-        )
-        
-        driver = mockDriver
-        ride.driverId = mockDriver.id
-        ride.driverName = mockDriver.name
-        ride.driverPhone = mockDriver.phone
+        driver = selectedDriver
+        ride.driverId = selectedDriver.id
+        ride.driverName = selectedDriver.name
+        ride.driverPhone = selectedDriver.phone
         ride.status = .driverFound
         currentRide = ride
         

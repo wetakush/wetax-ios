@@ -32,14 +32,35 @@ if exist "%TEMP_PATH%" rmdir /s /q "%TEMP_PATH%"
 mkdir "%EXPORT_PATH%"
 mkdir "%TEMP_PATH%"
 
-echo [2/5] Распаковка .xcarchive...
-REM .xcarchive это ZIP архив, распаковываем его
-cd /d "%TEMP_PATH%"
-powershell -Command "Expand-Archive -Path '%ARCHIVE_PATH%' -DestinationPath '%TEMP_PATH%\extracted' -Force"
+echo [2/5] Поиск WeTax.app...
+REM Проверяем, это папка .xcarchive или ZIP файл
+set "APP_PATH="
 
-if not exist "%TEMP_PATH%\extracted\Products\Applications\WeTax.app" (
-    echo Ошибка: Не найден WeTax.app в архиве
-    echo Проверьте структуру архива
+REM Проверяем, это директория .xcarchive
+if exist "%ARCHIVE_PATH%\Products\Applications\WeTax.app" (
+    set "APP_PATH=%ARCHIVE_PATH%\Products\Applications\WeTax.app"
+    echo Найден .xcarchive папка, используем напрямую...
+) else (
+    REM Пробуем распаковать как ZIP
+    echo Попытка распаковки как ZIP...
+    cd /d "%TEMP_PATH%"
+    powershell -Command "try { Expand-Archive -Path '%ARCHIVE_PATH%' -DestinationPath '%TEMP_PATH%\extracted' -Force } catch { Write-Host 'Ошибка распаковки' }"
+    
+    if exist "%TEMP_PATH%\extracted\Products\Applications\WeTax.app" (
+        set "APP_PATH=%TEMP_PATH%\extracted\Products\Applications\WeTax.app"
+    ) else if exist "%TEMP_PATH%\extracted\WeTax.xcarchive\Products\Applications\WeTax.app" (
+        set "APP_PATH=%TEMP_PATH%\extracted\WeTax.xcarchive\Products\Applications\WeTax.app"
+    ) else (
+        echo Ошибка: Не найден WeTax.app в архиве
+        echo Проверьте структуру архива
+        echo Ожидается: Products\Applications\WeTax.app
+        pause
+        exit /b 1
+    )
+)
+
+if not exist "%APP_PATH%" (
+    echo Ошибка: WeTax.app не найден
     pause
     exit /b 1
 )
@@ -49,7 +70,7 @@ REM Создаем папку Payload
 mkdir "%TEMP_PATH%\Payload"
 
 REM Копируем .app в Payload
-xcopy /E /I /Y "%TEMP_PATH%\extracted\Products\Applications\WeTax.app" "%TEMP_PATH%\Payload\WeTax.app"
+xcopy /E /I /Y "%APP_PATH%" "%TEMP_PATH%\Payload\WeTax.app\" >nul
 
 echo [4/5] Создание IPA файла...
 REM Архивируем Payload в ZIP и переименовываем в IPA

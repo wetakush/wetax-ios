@@ -13,25 +13,25 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color.gray.opacity(0.1).ignoresSafeArea()
+                Color.black.ignoresSafeArea()
                 
                 ScrollView {
                     VStack(spacing: 0) {
                         // Профиль пользователя
                         HStack(spacing: 16) {
                             Circle()
-                                .fill(Color.gray.opacity(0.2))
+                                .fill(Color.gray.opacity(0.3))
                                 .frame(width: 60, height: 60)
                                 .overlay(
                                     Image(systemName: "person.fill")
                                         .font(.title2)
-                                        .foregroundColor(.gray)
+                                        .foregroundColor(.white)
                                 )
                             
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(authViewModel.currentUser?.name ?? "Пользователь")
                                     .font(.headline)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.white)
                                 
                                 Text(authViewModel.currentUser?.phone ?? "")
                                     .font(.subheadline)
@@ -41,7 +41,7 @@ struct ProfileView: View {
                             Spacer()
                         }
                         .padding()
-                        .background(Color.white)
+                        .background(Color.black)
                         
                         // Меню
                         VStack(spacing: 0) {
@@ -90,7 +90,7 @@ struct ProfileView: View {
                                 destination: AnyView(AboutView())
                             )
                         }
-                        .background(Color.white)
+                        .background(Color.black)
                         .padding(.top, 8)
                         
                         // Кнопка выхода
@@ -102,7 +102,7 @@ struct ProfileView: View {
                                 .foregroundColor(.red)
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.white)
+                                .background(Color.black)
                         }
                         .padding(.top, 8)
                     }
@@ -130,7 +130,7 @@ struct ProfileMenuItem: View {
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                         .font(.body)
                     
                     if let subtitle = subtitle {
@@ -147,7 +147,7 @@ struct ProfileMenuItem: View {
                     .foregroundColor(.gray)
             }
             .padding()
-            .background(Color.white)
+            .background(Color.black)
             .overlay(
                 Rectangle()
                     .frame(height: 0.5)

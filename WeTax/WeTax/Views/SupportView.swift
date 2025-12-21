@@ -65,7 +65,11 @@ struct SupportView: View {
                     SupportCategoryRow(title: "Забытые вещи", icon: "bag.fill")
                     SupportCategoryRow(title: "Частые вопросы", icon: "questionmark.bubble.fill")
                     SupportCategoryRow(title: "Получить чек", icon: "doc.text.fill")
-                    SupportCategoryRow(title: "Сообщения службы поддержки", icon: "message.fill")
+                    NavigationLink(destination: SupportChatView()) {
+                        SupportCategoryRow(title: "Написать в поддержку", icon: "message.fill", showChevron: false)
+                    }
+                    
+                    SupportCategoryRow(title: "Сообщения службы поддержки", icon: "envelope.fill")
                     SupportCategoryRow(title: "Посмотреть все сообщения", icon: "envelope.fill")
                 }
                 .background(Color.white)
@@ -86,6 +90,7 @@ struct SupportView: View {
 struct SupportCategoryRow: View {
     let title: String
     let icon: String
+    var showChevron: Bool = true
     
     var body: some View {
         Button(action: {}) {
@@ -99,9 +104,11 @@ struct SupportCategoryRow: View {
                 
                 Spacer()
                 
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundColor(.gray)
+                if showChevron {
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
             }
             .padding()
         }

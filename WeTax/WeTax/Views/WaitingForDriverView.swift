@@ -30,28 +30,6 @@ struct WaitingForDriverView: View {
                         .font(.subheadline)
                         .foregroundColor(.gray)
                     
-                    // Показываем доступные машины через 2 секунды
-                    if !rideViewModel.availableCars.isEmpty {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Доступные автомобили:")
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                            
-                            ForEach(rideViewModel.availableCars, id: \.self) { car in
-                                HStack {
-                                    Image(systemName: "car.fill")
-                                        .foregroundColor(Color(hex: "007AFF"))
-                                    Text(car)
-                                        .font(.subheadline)
-                                        .foregroundColor(.black)
-                                }
-                            }
-                        }
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(12)
-                        .padding(.top, 8)
-                    }
                 } else if let driver = rideViewModel.driver {
                     // Информация о водителе
                     VStack(spacing: 16) {
@@ -71,11 +49,16 @@ struct WaitingForDriverView: View {
                             .fontWeight(.semibold)
                             .foregroundColor(.black)
                         
-                        HStack {
-                            Image(systemName: "star.fill")
-                                .foregroundColor(.yellow)
+                        // Звезды рейтинга
+                        HStack(spacing: 4) {
+                            ForEach(0..<5) { index in
+                                Image(systemName: index < Int(driver.rating) ? "star.fill" : "star")
+                                    .foregroundColor(index < Int(driver.rating) ? .yellow : .gray.opacity(0.3))
+                                    .font(.caption)
+                            }
                             Text(String(format: "%.1f", driver.rating))
                                 .fontWeight(.medium)
+                                .foregroundColor(.black)
                         }
                         
                         // Информация об авто
@@ -121,6 +104,24 @@ struct WaitingForDriverView: View {
                             .background(Color(hex: "007AFF"))
                             .foregroundColor(.white)
                             .cornerRadius(12)
+                        }
+                        
+                        // Кнопка выбора музыки (только для бизнеса)
+                        if rideViewModel.currentRide?.carType == .business && rideViewModel.currentRide?.status == .inProgress {
+                            Button(action: {
+                                rideViewModel.showMusicSelection = true
+                            }) {
+                                HStack {
+                                    Image(systemName: "music.note")
+                                    Text("Выбрать музыку")
+                                }
+                                .fontWeight(.medium)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.purple.opacity(0.2))
+                                .foregroundColor(.purple)
+                                .cornerRadius(12)
+                            }
                         }
                         
                         // Кнопка завершения поездки (для симуляции)
@@ -172,6 +173,9 @@ struct WaitingForDriverView: View {
             } else if let ride = rideViewModel.currentRide, let driver = rideViewModel.driver {
                 RideCompletionView(ride: ride, driver: driver)
             }
+        }
+        .sheet(isPresented: $rideViewModel.showMusicSelection) {
+            MusicSelectionView()
         }
     }
 }

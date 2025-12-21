@@ -36,8 +36,18 @@ struct OrderTaxiView: View {
                     AddressInputPanel(
                         fromAddress: $rideViewModel.fromAddress,
                         toAddress: $rideViewModel.toAddress,
+                        locationService: locationService,
                         onSearch: {
                             showAddressInput = true
+                        },
+                        onUseMyLocation: {
+                            if let location = locationService.currentLocation {
+                                rideViewModel.fromAddress = "Мое местоположение"
+                                region = MKCoordinateRegion(
+                                    center: location,
+                                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                                )
+                            }
                         }
                     )
                     .padding()
@@ -78,6 +88,12 @@ struct OrderTaxiView: View {
                 locationService: locationService
             )
         }
+        .sheet(isPresented: $rideViewModel.showCarSelection) {
+            CarSelectionView(rideViewModel: rideViewModel)
+        }
+        .sheet(isPresented: $rideViewModel.showMusicSelection) {
+            MusicSelectionView()
+        }
     }
     
     private func setupLocation() {
@@ -114,7 +130,9 @@ struct OrderTaxiView: View {
 struct AddressInputPanel: View {
     @Binding var fromAddress: String
     @Binding var toAddress: String
+    var locationService: LocationService
     var onSearch: () -> Void
+    var onUseMyLocation: () -> Void
     
     var body: some View {
         VStack(spacing: 0) {
@@ -132,6 +150,12 @@ struct AddressInputPanel: View {
                         TextField("От: Комарова 9", text: $fromAddress)
                             .font(.subheadline)
                             .foregroundColor(.black)
+                        
+                        Button(action: onUseMyLocation) {
+                            Image(systemName: "location.fill")
+                                .foregroundColor(Color(hex: "007AFF"))
+                                .font(.caption)
+                        }
                     }
                     
                     HStack {
